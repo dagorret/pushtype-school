@@ -1,0 +1,36 @@
+= form_for @user, url: url do |f|
+  .large-8.columns
+    .container
+      .head
+        .left.btn= link_to ficon(:previous), push_type_admin.users_path
+        .title= yield :title
+      .body.padded
+        .row.title
+          .columns
+            = f.label :name
+            = f.text_field :name
+        .row.email
+          .columns
+            = f.label :email
+            = f.email_field :email
+
+        .row.custom-fields
+          - @user.fields.each do |key, field|
+            %div{ class: field_classes(field) }
+              = f.label field.name, field.label
+              = render_field field, f
+
+  .large-4.columns
+    .side-panel{ :'side-panel' => true }
+      .padded
+        .meta-table= render 'meta_table'
+      .submit.text-center
+        - if @user.new_record?
+          %button.button.success.radius= ficon :check, 'Create user'
+        - else
+          %button.button.radius= ficon :check, 'Update user'
+          - unless @user == push_type_user
+            .text-button.alert
+              = link_to 'Delete user', push_type_admin.user_path(@user), method: 'delete', data: { confirm: true }
+            
+            

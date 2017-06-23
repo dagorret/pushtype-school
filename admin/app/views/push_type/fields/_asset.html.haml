@@ -1,0 +1,28 @@
+%asset-field{ asset: asset_hash(f.object.send(field.relation_name.to_sym)).to_json, :'inline-template' => true }
+  .asset-field{ class: ('error' if f.object.errors[field.name].present?) }
+    = f.hidden_field field.name, field.html_options.merge(value: '{{ assetId }}')
+
+    .row{ :'v-if' => 'asset' }
+      .small-4.medium-3.columns
+        %img.preview{ :'v-bind:alt' => 'asset.file_name', :'v-bind:src' => 'asset.preview_thumb_url' }
+      .small-8.medium-9.columns
+        %table
+          %tr
+            %th File name
+            %td {{ asset.file_name }}
+          %tr
+            %th File size
+            %td {{ asset.file_size | kb }}
+          %tr
+            %th Content type
+            %td {{ asset.mime_type }}
+        %a.button.secondary.small.radius{ :'v-on:click.prevent' => 'deselectAsset()' } Remove media
+    %div{ :'v-if' => '!asset' }
+      %a.button.success.small.radius{ :'v-bind:data-reveal-id' => 'uid' } Pick media
+
+    .reveal-modal{ :'v-bind:id' => 'uid', data: { reveal: true } }
+      %asset-modal{ :':reveal-id' => 'uid' }
+
+- if f.object.errors[field.name].present?
+  %small.error= f.object.errors[field.name].join(', ')
+

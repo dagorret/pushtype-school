@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>PushType :: <%= yield :title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%= javascript_include_tag 'vendor/modernizr' %>
+  <%= javascript_include_tag 'push_type/admin', 'push_type/admin_assets' %>
+  <%= stylesheet_link_tag    'push_type/admin', 'push_type/admin_assets', '//fonts.googleapis.com/css?family=Lato:300,300italic,400,700|Anonymous+Pro:400,400italic,700', media: 'all' %>
+  <%= favicon_link_tag 'push_type/pushtype-favicon.png' %>
+  <%= csrf_meta_tags %>
+  <meta name="turbolinks-cache-control" content="no-cache">
+</head>
+<body>
+  
+  <header class="header contain-to-grid" role="banner">
+    <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1><%= link_to image_tag('push_type/pushtype-logo.svg', size: '140x26', alt: 'PushType', class: 'logo'), push_type_admin.root_path %></h1>
+        </li>
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+      </ul>
+      <section class="top-bar-section">
+        <%= render_menu(:main) %>
+        <%= render_menu(:utility) %>
+      </section>
+    </nav>
+  </header>
+
+  <section class="main" role="main">
+    <div class="row">
+      <div class="columns">
+        <% flash.each do |key, value| %>
+          <%= content_tag :div, class: "alert-box radius #{key}", data: { alert: '' } do %>
+            <%= value %>
+            <a href="#" class="close">&times;</a>
+          <% end %>
+        <% end %>
+        <%= breadcrumbs.render format: :foundation %>
+      </div>
+    </div>
+
+    <div class="row">
+      <%= yield %>
+    </div>
+  </section>
+
+  <div id="reveal-ajax" class="reveal-modal" data-reveal></div>
+
+</body>
+</html>

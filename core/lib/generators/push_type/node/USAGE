@@ -1,0 +1,9 @@
+Description:
+    Generates a model that inherits from PushType::Node
+
+Example:
+    rails generate push_type:node page body:text
+
+    This will create:
+        app/models/page.rb
+        app/views/nodes/page.html.erb

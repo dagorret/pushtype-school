@@ -1,0 +1,17 @@
+language: ruby
+rvm:
+  - 2.3.1
+addons:
+  postgresql: '9.4'
+install:
+  - 'gem install bundler'
+  - 'bundle install --jobs=3 --retry=3'
+  - 'cd admin && npm install && cd ..'
+before_script:
+  - cp database.yml.travis core/config/database.yml
+  - cp database.yml.travis admin/config/database.yml
+  - cp database.yml.travis auth/config/database.yml
+script: bundle exec rake test
+notifications:
+  slack:
+    secure: TvhktXNnGEccRLQc51dPlIWuvOdt/YEKB+5xQ+E1FYuOYjgIrTcXD552A7vca+yAuehMREN2HVzYoMCczSjWzj+1rYDlqtWxM6Trq7lPcGjJ+IxW6dSvTe0tu6VzQtwnJ56YBBSPTzSeUqQLjN5K0wfd/deQ9+2yVStMyNJm39w=

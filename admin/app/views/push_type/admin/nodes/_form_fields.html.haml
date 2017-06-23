@@ -1,0 +1,40 @@
+%node-form{ node: node_hash(@node).to_json, :'inline-template' => true }
+  = form_for @node, url: url do |f|
+    .large-8.columns
+      .container
+        .head
+          .left.btn= link_to ficon(:previous), node_back_link(@node)
+          .title= yield :title
+        .body.padded
+          .row.title
+            .columns
+              = f.label :title
+              = f.text_field :title, :'v-model' => 'node.title', :'v-on:keyup' => 'setSlug'
+          .row.permalink
+            .columns{ :'v-bind:class' => '{visible: node.slug}' }
+              %span.key Permalink
+              %span.value
+                %span.show-for-medium-up http://#{ request.host_with_port }/
+                = content_tag :span, @node.parent.permalink+'/' if @node.parent
+                %span {{ node.slug }}
+              %button.button.tiny.radius.secondary{ data: { dropdown: 'slug-field' } } Edit
+              #slug-field.f-dropdown.content{ data: { dropdown: { content: true } } }
+                = f.label :slug
+                = f.text_field :slug, :'v-model' => 'node.slug'
+              - if @node.errors.include? :slug
+                .error-icon= ficon :info, 'Error'
+
+          .row.custom-fields
+            - @node.fields.each do |key, field|
+              %div{ class: field_classes(field) }
+                = f.label field.name, field.label
+                = render_field field, f
+
+    .large-4.columns
+      .side-panel{ :'v-side-panel' => true }
+        .padded
+          = render 'meta_table', f: f
+        .submit.text-center
+          = render 'form_submit', f: f
+
+      

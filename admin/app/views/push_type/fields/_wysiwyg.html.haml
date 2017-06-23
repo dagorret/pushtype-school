@@ -1,0 +1,7 @@
+%wysiwyg-field{ :'inline-template' => true }
+  .wysiwyg-field
+    = f.text_area field.name, field.html_options
+
+    .reveal-modal{ :'v-bind:id' => 'uid', data: { reveal: true } }
+      %asset-modal{ :':reveal-id' => 'uid' }
+

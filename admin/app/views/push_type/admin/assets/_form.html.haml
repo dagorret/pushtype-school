@@ -1,0 +1,44 @@
+%asset-form{ asset: asset_hash(@asset).to_json, :'inline-template' => true }
+  = form_for @asset, url: push_type_admin.assets_path, method: 'post', html: { 'v-bind:action' => 'saveUrl' } do |f|
+    = hidden_field_tag :_method, nil, :'v-bind:value' => 'saveMethod'
+    .large-8.columns
+      .container
+        .head
+          .left.btn= link_to ficon(:previous), asset_back_link(@asset)
+          .title= yield :title
+        .body.padded
+          .row.asset-upload
+            %div{ :'v-show' => "asset['new_record?']" }
+              .columns
+                .dropzone{ :'v-asset-upload' => true, :'fallback-id' => 'asset_file' }
+                  .prompt Drag a file to quickly upload it&hellip; (or click)
+                  .icon= ficon(:upload_cloud)
+              .columns{ :'v-show' => "!hideFileField || #{ @asset.errors.include?(:file) }" }
+                = f.label :file
+                = f.file_field :file
+            %div{ :'v-show' => "!asset['new_record?']" }
+              .small-4.medium-3.columns
+                %img.preview{ :'v-bind:alt' => 'asset.file_name', :'v-bind:src' =>  'asset.preview_thumb_url' }
+              .small-8.medium-9.columns
+                %table
+                  %tr
+                    %th File name
+                    %td {{ asset.file_name }}
+                  %tr
+                    %th File size
+                    %td {{ asset.file_size | kb }}
+                  %tr
+                    %th Content type
+                    %td {{ asset.mime_type }}
+          .row.string
+            .columns
+              = f.label :description
+              = f.text_field :description
+
+    .large-4.columns
+      .side-panel{ :'side-panel' => true }
+        .padded
+          = render 'meta_table'
+        .submit.text-center
+          = render 'form_submit'
+              
